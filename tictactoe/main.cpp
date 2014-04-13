@@ -57,24 +57,31 @@ bool gameFinished(string game[3][3]) {
     return horizontalWin(game) || verticalWin(game) || diagonalWin(game);
 }
 
+bool validInput(int v) {
+    if(v < 0 || v > 2) {
+        cout << "Invalid position " << v << ", should be one of [0, 1, 2]" << endl;
+        return false;
+    }
+
+    return true;
+}
+
 void askInput(string game[3][3], string player[]) {
     int x, y;
 
     // asks for x
-    cout << player[0] << ", please input your next X position:" << endl;
+    cout << player[0] << ", please input your next horizontal position:" << endl;
     cin >> x;
 
-    if(x < 0 || x > 2) {
-        cout << "Invalid position " << x << ", should be between 1 and 3." << endl;
+    if(!validInput(x)) {
         return askInput(game, player);
     }
 
     // asks for y
-    cout << player[0] << ", please input your next Y position:" << endl;
+    cout << player[0] << ", please input your next vertical position:" << endl;
     cin >> y;
 
-    if(y < 0 || y > 2) {
-        cout << "Invalid position " << y << ", should be between 1 and 3." << endl;
+    if(!validInput(y)) {
         return askInput(game, player);
     }
 
@@ -113,7 +120,7 @@ int main() {
     };
 
     // players data
-    string players[2][2] = {{"P1", "X"}, {"P2", "O"}};
+    string players[2][2] = {{"Player 1", "X"}, {"Player 2", "O"}};
 
     while(!gameFinished(game)) {
         askInput(game, players[currentPlayer]);
@@ -126,6 +133,8 @@ int main() {
             currentPlayer = 0;
         }
     }
+
+    cout << players[currentPlayer][0] << " wins the game!" << endl;
 
     return 0;
 }
