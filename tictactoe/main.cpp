@@ -57,13 +57,21 @@ bool gameFinished(string game[3][3]) {
     return horizontalWin(game) || verticalWin(game) || diagonalWin(game);
 }
 
-bool validInput(int v) {
-    if(v < 0 || v > 2) {
+int readInput() {
+    int v;
+    cin >> v;
+
+    if(cin.fail()) {
+        cin.clear();
+        cin.ignore();
+        cout << "Provided value is not a number" << endl;
+        return readInput();
+    } else if(v < 0 || v > 2) {
         cout << "Invalid position " << v << ", should be one of [0, 1, 2]" << endl;
-        return false;
+        return readInput();
     }
 
-    return true;
+    return v;
 }
 
 void askInput(string game[3][3], string player[]) {
@@ -71,19 +79,11 @@ void askInput(string game[3][3], string player[]) {
 
     // asks for x
     cout << player[0] << ", please input your next horizontal position:" << endl;
-    cin >> x;
-
-    if(!validInput(x)) {
-        return askInput(game, player);
-    }
+    x = readInput();
 
     // asks for y
     cout << player[0] << ", please input your next vertical position:" << endl;
-    cin >> y;
-
-    if(!validInput(y)) {
-        return askInput(game, player);
-    }
+    y = readInput();
 
     // valid play?
     if(game[x][y] != "_") {
