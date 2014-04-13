@@ -110,7 +110,7 @@ void printBoard(string game[3][3]) {
 
 int main() {
     // the current player
-    int currentPlayer = 0;
+    int currentPlayer = 1;
 
     // the game board
     string game[3][3] = {
@@ -123,15 +123,15 @@ int main() {
     string players[2][2] = {{"Player 1", "X"}, {"Player 2", "O"}};
 
     while(!gameFinished(game)) {
-        askInput(game, players[currentPlayer]);
-        printBoard(game);
-
         // switch players
         if(currentPlayer == 0) {
             currentPlayer = 1;
         } else {
             currentPlayer = 0;
         }
+
+        askInput(game, players[currentPlayer]);
+        printBoard(game);
     }
 
     cout << players[currentPlayer][0] << " wins the game!" << endl;
