@@ -124,11 +124,7 @@ int main() {
 
     while(!gameFinished(game)) {
         // switch players
-        if(currentPlayer == 0) {
-            currentPlayer = 1;
-        } else {
-            currentPlayer = 0;
-        }
+        currentPlayer = currentPlayer == 0 ? 1 : 0;
 
         askInput(game, players[currentPlayer]);
         printBoard(game);
