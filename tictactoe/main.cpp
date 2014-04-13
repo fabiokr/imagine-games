@@ -53,8 +53,20 @@ bool diagonalWin(string game[3][3]) {
     return false;
 }
 
-bool gameFinished(string game[3][3]) {
+bool winner(string game[3][3]) {
     return horizontalWin(game) || verticalWin(game) || diagonalWin(game);
+}
+
+bool completed(string game[3][3]) {
+    for(int i = 0; i < 3; i++) {
+        for(int k = 0; k < 2; k++) {
+            if(game[i][k] == "_") {
+                return false;
+            }
+        }
+    }
+
+    return true;
 }
 
 int readInput() {
@@ -122,15 +134,21 @@ int main() {
     // players data
     string players[2][2] = {{"Player 1", "X"}, {"Player 2", "O"}};
 
-    while(!gameFinished(game)) {
+    while(true) {
         // switch players
         currentPlayer = currentPlayer == 0 ? 1 : 0;
 
         askInput(game, players[currentPlayer]);
         printBoard(game);
-    }
 
-    cout << players[currentPlayer][0] << " wins the game!" << endl;
+        if(winner(game)) {
+            cout << players[currentPlayer][0] << " wins the game!" << endl;
+            break;
+        } else if(completed(game)) {
+            cout << "The game was a draw." << endl;
+            break;
+        }
+    }
 
     return 0;
 }
