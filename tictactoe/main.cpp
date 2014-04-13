@@ -16,7 +16,7 @@ bool horizontalWin(string game[3][3]) {
         }
 
         if(win) {
-            cout << "Horizontal win!" << endl;
+            cout << "Vitoria horizontal!" << endl;
             return true;
         }
     }
@@ -35,7 +35,7 @@ bool verticalWin(string game[3][3]) {
         }
 
         if(win) {
-            cout << "Vertical win!" << endl;
+            cout << "Vitoria vertical!" << endl;
             return true;
         }
     }
@@ -46,7 +46,7 @@ bool verticalWin(string game[3][3]) {
 bool diagonalWin(string game[3][3]) {
     if(((game[0][0] != "_" && game[0][0] == game[1][1]) && game[1][1] == game[2][2]) ||
         ((game[0][2] != "_" && game[0][2] == game[1][1]) && game[1][1] == game[2][0])) {
-        cout << "Diagonal win!" << endl;
+        cout << "Vitoria diagonal!" << endl;
         return true;
     }
 
@@ -76,10 +76,10 @@ int readInput() {
     if(cin.fail()) {
         cin.clear();
         cin.ignore();
-        cout << "Provided value is not a number" << endl;
+        cout << "Valor nao eh um numero" << endl;
         return readInput();
     } else if(v < 0 || v > 2) {
-        cout << "Invalid position " << v << ", should be one of [0, 1, 2]" << endl;
+        cout << "Posicao invalida " << v << ", deve ser um dentre [0, 1, 2]" << endl;
         return readInput();
     }
 
@@ -90,16 +90,16 @@ void askInput(string game[3][3], string player[]) {
     int x, y;
 
     // asks for x
-    cout << player[0] << ", please input your next horizontal position:" << endl;
+    cout << player[0] << ", por favor entre com sua posicao horizontal:" << endl;
     x = readInput();
 
     // asks for y
-    cout << player[0] << ", please input your next vertical position:" << endl;
+    cout << player[0] << ", por favor entre com sua posicao vertical:" << endl;
     y = readInput();
 
     // valid play?
     if(game[x][y] != "_") {
-        cout << "Position [" << x << ", " << y << "] already has a value (" << game[x][y] << ")." << endl;
+        cout << "Posicao[" << x << ", " << y << "] ja possui um valor (" << game[x][y] << ")." << endl;
         return askInput(game, player);
     }
 
@@ -108,7 +108,7 @@ void askInput(string game[3][3], string player[]) {
 }
 
 void printBoard(string game[3][3]) {
-    cout << endl << "Game status: " << endl << endl;
+    cout << endl << "Status do jogo: " << endl << endl;
 
     for(int i = 0; i < 3; i++) {
         for(int k = 0; k < 3; k++) {
@@ -132,7 +132,7 @@ int main() {
     };
 
     // players data
-    string players[2][2] = {{"Player 1", "X"}, {"Player 2", "O"}};
+    string players[2][2] = {{"Jogador 1", "X"}, {"Jogador 2", "O"}};
 
     while(true) {
         // switch players
@@ -142,10 +142,10 @@ int main() {
         printBoard(game);
 
         if(winner(game)) {
-            cout << players[currentPlayer][0] << " wins the game!" << endl;
+            cout << players[currentPlayer][0] << " venceu o jogo!" << endl;
             break;
         } else if(completed(game)) {
-            cout << "The game was a draw." << endl;
+            cout << "O jogo terminou em empate." << endl;
             break;
         }
     }
