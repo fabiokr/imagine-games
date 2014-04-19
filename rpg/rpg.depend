@@ -1,0 +1,7 @@
+# depslib dependency file v1.0
+1397923759 source:/home/fabio/dev/imagine/rpg/main.cpp
+	<stdlib.h>
+	<time.h>
+	<iostream>
+	<limits>
+

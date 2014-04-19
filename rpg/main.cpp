@@ -1,6 +1,7 @@
 #include <stdlib.h>
 #include <time.h>
 #include <iostream>
+#include <limits>
 
 using namespace std;
 
@@ -12,33 +13,66 @@ struct Hero {
     int xp;
 };
 
+void clear_screen() {
+    #ifdef WINDOWS
+    system("CLS");
+    #else
+    system("clear");
+    #endif
+}
+
+void wait_to_continue() {
+    cout << "Pressione ENTER para continuar..." << endl;
+    cin.ignore();
+    cin.get();
+}
+
 void status(Hero hero) {
-    cout << hero.name << ": " << "HP " << hero.hp << "/" << hero.hp_max << " | XP " << hero.xp << " | ATK " << hero.attack << endl;
+    int hp = hero.hp < 0 ? 0 : hero.hp;
+    cout << "-----------------------------" << endl << endl;
+    cout << hero.name << ": " << "HP " << hp << "/" << hero.hp_max << " | XP " << hero.xp << " | ATK " << hero.attack << endl;
     cout << "-----------------------------" << endl << endl;
 }
 
 int chooseDoor() {
-    cout << "Escolha a proxima porta (1, 2 ou 3):" << endl;
+    clear_screen();
+
+    cout << "Escolha a proxima porta (1, 2):" << endl;
+    cout << "     ______            ______       " << endl;
+    cout << "  ,-' ;  ! `-.       -' ;  ! `-.    " << endl;
+    cout << " / :  !  :  . \    / :  !  :  . \   " << endl;
+    cout << "|_ ;   __:  ;  |  |_ ;   __:  ;  |  " << endl;
+    cout << ")| .  :)(.  !  |  )| .  :)(.  !  |  " << endl;
+    cout << "|'    (##)  _  |  |'    (##)  _  |  " << endl;
+    cout << "|  :  ;`'  (_) (  |  :  ;`'  (_) (  " << endl;
+    cout << "|  :  :  .     |  |  :  :  .     |  " << endl;
+    cout << ")_ !  ,  ;  ;  |  )_ !  ,  ;  ;  |  " << endl;
+    cout << "|| .  .  :  :  |  || .  .  :  :  |  " << endl;
+    cout << "|' .  |  :  .  |  |' .  |  :  .  |  " << endl;
+    cout << "|___--;----.___|  |___--;----.___|  " << endl;
+
     int door;
     cin >> door;
     return door;
 }
 
 Hero receivePotion(Hero hero) {
+    clear_screen();
+
     cout << "Voce achou uma pocao! Recuperou 40 HP." << endl << endl;
+    cout << " __ " << endl;
+    cout << " )( " << endl;
+    cout << "(__)" << endl;
 
-    cout << "/---\\" << endl;
-    cout << "|~~~|" << endl;
-    cout << "|   |" << endl;
-    cout << "\\___/" << endl << endl;
-
-    if(hero.hp < hero.hp_max && hero.hp + 20 > hero.hp_max) {
+    if(hero.hp < hero.hp_max && hero.hp + 30 > hero.hp_max) {
         hero.hp = hero.hp_max;
     } else if(hero.hp < hero.hp_max) {
-        hero.hp += 40;
+        hero.hp += 30;
     }
 
     status(hero);
+
+    wait_to_continue();
 
     return hero;
 }
@@ -48,23 +82,38 @@ bool died(Hero hero) {
 }
 
 Hero fightMonster(Hero hero) {
-    cout << "A wild Ogro appears! Ele te desafia para um par ou impar! Voce eh par!" << endl << endl;;
+    clear_screen();
+
+    cout << "A wild Ogro appears! Ele te desafia para um par ou impar! Voce eh par!" << endl << endl;
+    cout << "                       __,='`````'=/__                      " << endl;
+    cout << "                      '//  (o) \(o) \ `'         _,-,       " << endl;
+    cout << "                      //|     ,_)   (`\      ,-'`_,-\       " << endl;
+    cout << "                    ,-~~~\  `'==='  /-,      \==```` \__    " << endl;
+    cout << "                   /        `----'     `\     \       \/    " << endl;
+    cout << "                ,-`                  ,   \  ,.-\       \    " << endl;
+    cout << "               /      ,               \,-`\`_,-`\_,..--'\   " << endl;
+    cout << "              ,`    ,/,              ,>,   )     \--`````\  " << endl;
+    cout << "              (      `\`---'`  `-,-'`_,<   \      \_,.--'`  " << endl;
+    cout << "               `.      `--. _,-'`_,-`  |    \               " << endl;
+    cout << "                [`-.___   <`_,-'`------(    /               " << endl;
+    cout << "                (`` _,-\   \ --`````````|--`                " << endl;
+    cout << "                 >-`_,-`\,-` ,          |                   " << endl;
+    cout << "               <`_,'     ,  /\          /                   " << endl;
+    cout << "                `  \/\,-/ `/  \/`\_/V\_/                    " << endl;
+    cout << "                   (  ._. )    ( .__. )                     " << endl;
+    cout << "                   |      |    |      |                     " << endl;
+    cout << "                    \,---_|    |_---./                      " << endl;
+    cout << "                    ooOO(_)    (_)OOoo                      " << endl;
+
     Hero ogro = { "Ogro", 30 + hero.xp, 30 + hero.xp, 10 + hero.xp, 0 };
 
-    cout << "  O  " << endl;
-    cout << "__|_/" << endl;
-    cout << "  |  " << endl;
-    cout << " / \\ " << endl << endl;
-
     while(true) {
-        cout << "Digite um numero:" << endl;
-        int number;
-        cin >> number;
+        wait_to_continue();
+        clear_screen();
 
-        int ogro_number = rand() % 11;
-        int result = ogro_number + number;
+        int result = rand() % 100;
 
-        cout << "Ogro jogou " << ogro_number << "! Total " << result << "." << endl;
+        cout << "Resultado: " << result << "." << endl;
 
         if(result % 2 == 0) {
             cout << "Voce acertou! Ogrou tomou " << hero.attack << " de dano!" << endl;
@@ -77,10 +126,16 @@ Hero fightMonster(Hero hero) {
         }
 
         if(died(hero)) {
+            cout << "==========" << endl;
             cout << "Game over!" << endl;
+            cout << "==========" << endl;
+
             exit(0);
         } else if(died(ogro)) {
+            cout << "===================================================" << endl;
             cout << "Voce venceu! Ganhou 5 XP e subiu 1 level (ATK + 2)!" << endl;
+            cout << "===================================================" << endl;
+
             hero.attack += 2;
             hero.xp += 5;
             status(hero);
@@ -88,11 +143,12 @@ Hero fightMonster(Hero hero) {
         }
     }
 
+    wait_to_continue();
+
     return hero;
 }
 
-int main()
-{
+int main() {
     srand(time(NULL));
 
     cout << "=================" << endl;
@@ -107,21 +163,24 @@ int main()
 
     status(hero);
 
-    cout << hero.name << " acorda em uma masmorra, e a sua frente existem 3 portas..." << endl;
+    clear_screen();
+
+    cout << hero.name << " acorda em uma masmorra, e a sua frente existem 2 portas..." << endl;
+    wait_to_continue();
 
     while(true) {
         int door = chooseDoor();
-
-        int r = rand() % 10;
-        door = (r + door) % 3;
+        door += rand();
+        door = door % 3;
 
         if(door == 1) {
             hero = receivePotion(hero);
         } else if (door == 2) {
             hero = fightMonster(hero);
         } else {
+            clear_screen();
             cout << "Nao tinha nada!" << endl;
-            status(hero);
+            wait_to_continue();
         }
     }
 }
