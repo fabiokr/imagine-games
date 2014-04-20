@@ -11,11 +11,38 @@ struct Hero {
     int hp;
     int attack;
     int xp;
+
+    void status() {
+        int min_hp = hp < 0 ? 0 : hp;
+        cout << "-----------------------------" << endl << endl;
+        cout << name << ": " << "HP " << min_hp << "/" << hp_max << " | XP " << xp << " | ATK " << attack << endl;
+        cout << "-----------------------------" << endl << endl;
+    }
+
+    void recoverHP(int recover) {
+        if(hp < hp_max && hp + recover > hp_max) {
+            hp = hp_max;
+        } else if(hp < hp_max) {
+            hp += recover;
+        }
+    }
+
+    void takeDamage(int damage) {
+        if(hp < damage) {
+            hp = 0;
+        } else {
+            hp -= damage;
+        }
+    }
+
+    bool isDead() {
+        return hp <= 0;
+    }
 };
 
 void clear_screen() {
     #ifdef WINDOWS
-    system("CLS");
+    system("cls");
     #else
     system("clear");
     #endif
@@ -25,13 +52,6 @@ void wait_to_continue() {
     cout << "Pressione ENTER para continuar..." << endl;
     cin.ignore();
     cin.get();
-}
-
-void status(Hero hero) {
-    int hp = hero.hp < 0 ? 0 : hero.hp;
-    cout << "-----------------------------" << endl << endl;
-    cout << hero.name << ": " << "HP " << hp << "/" << hero.hp_max << " | XP " << hero.xp << " | ATK " << hero.attack << endl;
-    cout << "-----------------------------" << endl << endl;
 }
 
 int chooseDoor() {
@@ -64,21 +84,12 @@ Hero receivePotion(Hero hero) {
     cout << " )( " << endl;
     cout << "(__)" << endl;
 
-    if(hero.hp < hero.hp_max && hero.hp + 30 > hero.hp_max) {
-        hero.hp = hero.hp_max;
-    } else if(hero.hp < hero.hp_max) {
-        hero.hp += 30;
-    }
-
-    status(hero);
+    hero.recoverHP(40);
+    hero.status();
 
     wait_to_continue();
 
     return hero;
-}
-
-bool died(Hero hero) {
-    return hero.hp <= 0;
 }
 
 Hero fightMonster(Hero hero) {
@@ -117,28 +128,28 @@ Hero fightMonster(Hero hero) {
 
         if(result % 2 == 0) {
             cout << "Voce acertou! Ogrou tomou " << hero.attack << " de dano!" << endl;
-            ogro.hp -= hero.attack;
-            status(ogro);
+            ogro.takeDamage(hero.attack);
+            ogro.status();
         } else {
             cout << "Voce errou! Tomou " << ogro.attack << " de dano!" << endl;
-            hero.hp -= ogro.attack;
-            status(hero);
+            hero.takeDamage(ogro.attack);
+            hero.status();
         }
 
-        if(died(hero)) {
+        if(hero.isDead()) {
             cout << "==========" << endl;
             cout << "Game over!" << endl;
             cout << "==========" << endl;
 
             exit(0);
-        } else if(died(ogro)) {
+        } else if(ogro.isDead()) {
             cout << "===================================================" << endl;
             cout << "Voce venceu! Ganhou 5 XP e subiu 1 level (ATK + 2)!" << endl;
             cout << "===================================================" << endl;
 
             hero.attack += 2;
             hero.xp += 5;
-            status(hero);
+            hero.status();
             break;
         }
     }
@@ -161,7 +172,7 @@ int main() {
 
     Hero hero = { name, 100, 100, 10, 0 };
 
-    status(hero);
+    hero.status();
 
     clear_screen();
 
