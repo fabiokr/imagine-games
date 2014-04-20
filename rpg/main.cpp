@@ -40,6 +40,41 @@ struct Hero {
     }
 };
 
+struct RockPaperScizor {
+    string p1Play, p2Play;
+
+    RockPaperScizor(string p1, string p2) {
+        p1Play = p1;
+        p2Play = p2;
+    }
+
+    bool p1Win() {
+        return winner() == 1;
+    }
+
+    bool p2Win() {
+        return winner() == 2;
+    }
+
+    int winner() {
+        if(p1Play == p2Play) {
+            return 0;
+        } else if(p1Play == "r" && p2Play == "p") {
+            return 2;
+        } else if(p1Play == "r" && p2Play == "s") {
+            return 1;
+        } else if(p1Play == "p" && p2Play == "r") {
+            return 1;
+        } else if(p1Play == "p" && p2Play == "s") {
+            return 2;
+        } else if(p1Play == "s" && p2Play == "r") {
+            return 2;
+        } else if(p1Play == "s" && p2Play == "p") {
+            return 1;
+        }
+    }
+};
+
 void clear_screen() {
     #ifdef WINDOWS
     system("cls");
@@ -95,7 +130,7 @@ Hero receivePotion(Hero hero) {
 Hero fightMonster(Hero hero) {
     clear_screen();
 
-    cout << "A wild Ogro appears! Ele te desafia para um par ou impar! Voce eh par!" << endl << endl;
+    cout << "A wild Ogro appears! Ele te desafia para um Pedra Papel ou Tesoura!" << endl << endl;
     cout << "                       __,='`````'=/__                      " << endl;
     cout << "                      '//  (o) \(o) \ `'         _,-,       " << endl;
     cout << "                      //|     ,_)   (`\      ,-'`_,-\       " << endl;
@@ -122,18 +157,33 @@ Hero fightMonster(Hero hero) {
         wait_to_continue();
         clear_screen();
 
-        int result = rand() % 100;
+        cout << "Qual sua jogada? (ped[r]a, [p]apel, te[s]oura)";
+        string heroPlay, ogroPlay;
+        cin >> heroPlay;
 
-        cout << "Resultado: " << result << "." << endl;
+        int result = rand() % 3;
+        if(result == 0) {
+            ogroPlay = "p";
+        } else if(result == 1) {
+            ogroPlay = "r";
+        } else if(result == 2) {
+            ogroPlay = "s";
+        }
 
-        if(result % 2 == 0) {
-            cout << "Voce acertou! Ogrou tomou " << hero.attack << " de dano!" << endl;
+        RockPaperScizor game(heroPlay, ogroPlay);
+
+        cout << "Resultado: " << hero.name << " - " << heroPlay << ", " << ogro.name << " - " << ogroPlay << endl;
+
+        if(game.p1Win()) {
+            cout << "Voce ganhou! Ogrou tomou " << hero.attack << " de dano!" << endl;
             ogro.takeDamage(hero.attack);
             ogro.status();
-        } else {
-            cout << "Voce errou! Tomou " << ogro.attack << " de dano!" << endl;
+        } else if(game.p2Win()) {
+            cout << "Voce perdeu! Tomou " << ogro.attack << " de dano!" << endl;
             hero.takeDamage(ogro.attack);
             hero.status();
+        } else {
+            cout << "Empate!" << endl;
         }
 
         if(hero.isDead()) {
